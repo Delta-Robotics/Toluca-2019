@@ -29,9 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -44,6 +47,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import java.lang.InterruptedException;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
@@ -83,9 +88,15 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@TeleOp(name="SKYSTONE Vuforia Nav", group ="Concept")
+@Autonomous(name="ULTRA BIG CHALE", group ="Concept")
+
+
 //@Disabled
-public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
+public class TestBerdeja extends LinearOpMode {
+    HardwareMecanum hws       = new HardwareMecanum(); // use the class created to define a Pushbot's hardware
+    private ElapsedTime runtime = new ElapsedTime();
+
+
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
     // 1) Camera Source.  Valid choices are:  BACK (behind screen) or FRONT (selfie side)
@@ -97,6 +108,14 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
     private static final boolean PHONE_IS_PORTRAIT = false  ;
 
+
+    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     DRIVE_SPEED             = 0.6;
+    static final double     TURN_SPEED              = 0.5;
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -140,6 +159,29 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
     private float phoneZRotate    = 0;
 
     @Override public void runOpMode() {
+
+        hws.init(hardwareMap); //
+
+        hws.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hws.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hws.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hws.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        hws.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hws.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hws.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hws.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        // Send telemetry message to indicate successful Encoder reset.
+        telemetry.addData("Path0",  "Starting at %7d :%7d : %7d :%7d",
+                hws.frontLeft.getCurrentPosition(),
+                hws.frontRight.getCurrentPosition(),
+                hws.backRight.getCurrentPosition(),
+                hws.backLeft.getCurrentPosition());
+
+
+
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
@@ -313,7 +355,16 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
 
-        // waitForStart();
+        waitForStart();
+
+        telemetry.addData("Avanza a continuacion", "none");
+        telemetry.update();
+
+        encoderDrive(.3,-15,15,15,-15,1);
+        encoderDrive(.3,-30,30,30,-30,1);
+
+        telemetry.addData("Ya se movio", "none");
+        telemetry.update();
 
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
@@ -339,6 +390,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 }
             }
 
+            sleep(2000);
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
                 // express position (translation) of robot in inches.
@@ -346,9 +398,21 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
+                float skystoney = translation.get(1);
+
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+
+                if (skystoney > -4 || skystoney < 0 ){
+                telemetry.addData("posicion", "1");
+                telemetry.update();
+                } else if (skystoney > 1 || skystoney < 10){
+                    telemetry.addData("posicionDOS", "2");
+                    telemetry.update();
+                }
+
+
             }
             else {
                 telemetry.addData("Visible Target", "none");
@@ -358,5 +422,75 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
+    }
+
+    public void encoderDrive(double speed,
+                             double frontleft, double frontright,
+                             double backleft, double backright,
+                             double timeoutS) {
+        int newFrontLeftTarget;
+        int newFrontRightTarget;
+        int newBackLeftTarget;
+        int newBackRightTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newFrontLeftTarget = hws.frontLeft.getCurrentPosition() + (int)(frontleft * COUNTS_PER_INCH);
+            newFrontRightTarget = hws.frontRight.getCurrentPosition() + (int)(frontright * COUNTS_PER_INCH);
+            newBackLeftTarget = hws.backLeft.getCurrentPosition() + (int)(backleft * COUNTS_PER_INCH);
+            newBackRightTarget = hws.backRight.getCurrentPosition() + (int)(backright * COUNTS_PER_INCH);
+
+            hws.frontLeft.setTargetPosition(newFrontLeftTarget);
+            hws.frontRight.setTargetPosition(newFrontRightTarget);
+            hws.backLeft.setTargetPosition(newBackLeftTarget);
+            hws.backRight.setTargetPosition(newBackRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            hws.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hws.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hws.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hws.backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            hws.frontLeft.setPower(Math.abs(speed));
+            hws.frontRight.setPower(Math.abs(speed));
+            hws.backLeft.setPower(Math.abs(speed));
+            hws.backRight.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (hws.frontRight.isBusy() && hws.frontLeft.isBusy() && hws.backRight.isBusy() && hws.backLeft.isBusy() )) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d : %7d :%7d", newFrontLeftTarget,  newFrontRightTarget, newBackLeftTarget, newBackRightTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d : %7d :%7d",
+                        hws.frontLeft.getCurrentPosition(),
+                        hws.frontRight.getCurrentPosition(), hws.backLeft.getCurrentPosition(),
+                        hws.backRight.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            hws.frontRight.setPower(0);
+            hws.frontLeft.setPower(0);
+            hws.backLeft.setPower(0);
+            hws.backRight.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            hws.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            hws.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            hws.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            hws.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //  sleep(250);   // optional pause after each move
+        }
     }
 }

@@ -58,6 +58,7 @@ public class TeleopMecanum extends OpMode{
     /* Declare OpMode members. */
     HardwareMecanum hws       = new HardwareMecanum(); // use the class created to define a Pushbot's hardware
 
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -174,10 +175,10 @@ public class TeleopMecanum extends OpMode{
             // The left stick controls the axial movement
             // The right sick controls the rotation
 
-            hws.frontRightPower = hws.y - hws.rot - hws.x;
-            hws.backRightPower = hws.y - hws.rot + hws.x;
-            hws.frontLeftPower = hws.y + hws.rot + hws.x;
-            hws.backLeftPower = hws.y + hws.rot - hws.x;
+            hws.frontRightPower = -hws.y + hws.rot + hws.x;
+            hws.backRightPower = -hws.y + hws.rot - hws.x;
+            hws.frontLeftPower = -hws.y - hws.rot - hws.x;
+            hws.backLeftPower = -hws.y - hws.rot + hws.x;
             double frontRightPower  = y + rot + x;
             double backRightPower   = y + rot - x;
             double frontLeftPower   = y - rot - x;
