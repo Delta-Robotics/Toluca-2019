@@ -112,16 +112,8 @@ public class TeleopMecanum extends OpMode{
 
             //StartA
 
-            if (gamepad1.right_bumper){                  //set power elevador
-                hws.intakeLeft.setPower(1);
-                hws.intakeRight.setPower(1);
-            } else if (gamepad1.left_bumper){
-                hws.intakeLeft.setPower(-1);
-                hws.intakeRight.setPower(-1);
-            } else {
-                hws.intakeLeft.setPower(0);
-                hws.intakeRight.setPower(0);
-            }
+
+
 
             if(gamepad1.dpad_down){
                 hws.skystone.setPosition(.3);
@@ -145,10 +137,10 @@ public class TeleopMecanum extends OpMode{
                 hws.slider.setPower(0);
             }
 
-        if (gamepad1.a){                  //set power elevador
+        if (gamepad2.a){                  //set power elevador
             hws.intakeLeft.setPower(1);
             hws.intakeRight.setPower(1);
-        } else if (gamepad1.b){
+        } else if (gamepad2.b){
             hws.intakeLeft.setPower(-1);
             hws.intakeRight.setPower(-1);
         } else {
@@ -166,8 +158,8 @@ public class TeleopMecanum extends OpMode{
             // Sets the joystick values to variables for better math understanding
             // The Y axis goes
             hws.y = gamepad1.left_stick_y;
-            hws.x = -gamepad1.left_stick_x;
-            hws.rot = -gamepad1.right_stick_x;
+            hws.x = -gamepad1.right_stick_x;
+            hws.rot = -gamepad1.left_stick_x;
             double y = gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
             double rot = gamepad1.right_stick_x;
@@ -179,7 +171,7 @@ public class TeleopMecanum extends OpMode{
             hws.frontRightPower = -hws.y + hws.rot + hws.x;
             hws.backRightPower = -hws.y + hws.rot - hws.x;
             hws.frontLeftPower = -hws.y - hws.rot - hws.x;
-            hws.backLeftPower = -hws.y - hws.rot + hws.x;
+            hws.backLeftPower = hws.y + hws.rot - hws.x;
             double frontRightPower  = y + rot + x;
             double backRightPower   = y + rot - x;
             double frontLeftPower   = y - rot - x;

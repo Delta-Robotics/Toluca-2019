@@ -60,7 +60,6 @@ public class HardwareMecanum
     public DcMotor  backLeft   = null;
     public DcMotor  backRight  = null;
 
-
     public DcMotor  slider     = null;
     public DcMotor  intakeRight     = null;
     public DcMotor  intakeLeft     = null;
