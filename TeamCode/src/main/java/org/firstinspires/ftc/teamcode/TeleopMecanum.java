@@ -129,26 +129,11 @@ public class TeleopMecanum extends OpMode{
                 hws.skystone.setPosition(0);
             }
 
-            if(gamepad1.dpad_right){
-                hws.foundation.setPosition(.4);
-            } else if (gamepad1.dpad_left){
-                hws.foundation.setPosition(0);
-            }
 
 
             //startB
 
-            if (gamepad2.x){
-                hws.transicion.setPower(1);
-            } else if(gamepad2.a){
-                hws. transicion. setPower(-1);
-            } else if(gamepad2.y){
-                hws. transicion. setPower(.75);
-            } else if(gamepad2.b){
-                hws. transicion. setPower(.5);
-            }else{
-                hws.transicion.setPower(0);
-            }
+
 
             if (gamepad2.dpad_up){
                 hws.slider.setPower(1);
@@ -160,8 +145,24 @@ public class TeleopMecanum extends OpMode{
                 hws.slider.setPower(0);
             }
 
+        if (gamepad1.a){                  //set power elevador
+            hws.intakeLeft.setPower(1);
+            hws.intakeRight.setPower(1);
+        } else if (gamepad1.b){
+            hws.intakeLeft.setPower(-1);
+            hws.intakeRight.setPower(-1);
+        } else {
+            hws.intakeLeft.setPower(0);
+            hws.intakeRight.setPower(0);
+        }
 
-            telemetry.addData("Turboooooooo prro", turbo);
+
+
+
+
+
+
+        telemetry.addData("Turboooooooo prro", turbo);
             // Sets the joystick values to variables for better math understanding
             // The Y axis goes
             hws.y = gamepad1.left_stick_y;
@@ -225,7 +226,6 @@ public class TeleopMecanum extends OpMode{
             telemetry.addData("back left:", backLeftPower);
 
             telemetry.addData("skystone:", hws.skystone.getPosition());
-            telemetry.addData("foundation:", hws.foundation.getPosition());
 
             // Send telemetry message to signify robot running;
             telemetry.update();

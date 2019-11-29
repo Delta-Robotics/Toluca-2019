@@ -62,13 +62,10 @@ public class HardwareMecanum
 
 
     public DcMotor  slider     = null;
-    public DcMotor  transicion     = null;
     public DcMotor  intakeRight     = null;
     public DcMotor  intakeLeft     = null;
 
-    public CRServo outtake    = null;
-    public Servo    skystone    = null;
-    public Servo  foundation    = null;
+    public Servo   skystone    = null;
 
     public double frontRightPower;
     public double backRightPower;
@@ -103,7 +100,6 @@ public class HardwareMecanum
         intakeLeft = hwMap.get(DcMotor.class, "IL");
         intakeRight = hwMap.get(DcMotor.class, "IR");
         slider = hwMap.get(DcMotor.class, "SL");
-        transicion = hwMap.get(DcMotor.class, "TR");
 
         frontLeft.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         frontRight.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
@@ -113,7 +109,7 @@ public class HardwareMecanum
         intakeRight.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         intakeLeft.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         slider.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        transicion.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+
 
         // Set all motors to zero power
         frontRight.setPower(0);
@@ -129,12 +125,8 @@ public class HardwareMecanum
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
-        foundation  = hwMap.get(Servo.class, "FD");
         skystone = hwMap.get(Servo.class, "SS");
-        outtake = hwMap.get(CRServo.class, "OT");
 
-        outtake.setPower(0);
         skystone.setPosition(.4);
-        foundation.setPosition(0);
     }
 }
