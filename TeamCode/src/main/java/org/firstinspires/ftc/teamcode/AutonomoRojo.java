@@ -30,11 +30,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This file illustrates the concept of driving a path based on time.
@@ -57,9 +54,9 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomo", group="Pushbot")
+@Autonomous(name="AutonomoRojo", group="Pushbot")
 
-public class Autonomo extends LinearOpMode {
+public class AutonomoRojo extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareMecanum         robot   = new HardwareMecanum();   // Use a Pushbot's hardware
@@ -134,8 +131,8 @@ public class Autonomo extends LinearOpMode {
         robot.backRight.setPower(0);
         robot.frontRight.setPower(0);
         sleep(500);
-        robot.backLeft.setPower(-.4);
-        robot.frontLeft.setPower(-.4);
+        robot.backLeft.setPower(.4);
+        robot.frontLeft.setPower(.4);
         robot.backRight.setPower(.4);
         robot.frontRight.setPower(-.4);
         sleep(1800);

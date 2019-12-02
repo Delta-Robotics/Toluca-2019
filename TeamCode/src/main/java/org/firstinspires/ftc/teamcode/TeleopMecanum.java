@@ -102,9 +102,9 @@ public class TeleopMecanum extends OpMode{
             int cero = 0;
             int cienochenta = 180;
 
-            if (gamepad1.right_bumper) {
-                hws.turbo = 1;
-                turbo = 1;
+        if (gamepad1.right_trigger > 0.2 || gamepad1.left_trigger > 0.2){
+            hws.turbo = 0.3;
+                turbo = 0.3;
             } else {
                 hws.turbo = 1;
                 turbo = 1;
@@ -127,22 +127,20 @@ public class TeleopMecanum extends OpMode{
 
 
 
-            if (gamepad2.dpad_up){
-                hws.slider.setPower(1);
-            } else if (gamepad2.dpad_down){
-                hws.slider.setPower(-1);
-            } else if (gamepad2.right_bumper){
-                hws.slider.setPower(.4);
-            } else{
+            if(gamepad2.left_trigger > 0.2){
+                hws.slider.setPower(gamepad2.left_trigger);
+            }else if(gamepad2.right_trigger > 0.2){
+                hws.slider.setPower(-gamepad2.right_trigger);
+            }else{
                 hws.slider.setPower(0);
             }
 
         if (gamepad2.a){                  //set power elevador
-            hws.intakeLeft.setPower(1);
-            hws.intakeRight.setPower(1);
-        } else if (gamepad2.b){
             hws.intakeLeft.setPower(-1);
             hws.intakeRight.setPower(-1);
+        } else if (gamepad2.b){
+            hws.intakeLeft.setPower(0.3);
+            hws.intakeRight.setPower(0.3);
         } else {
             hws.intakeLeft.setPower(0);
             hws.intakeRight.setPower(0);
